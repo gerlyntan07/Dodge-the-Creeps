@@ -1,10 +1,13 @@
-[gd_scene load_steps=5 format=3 uid="uid://3r5btw5xas1m"]
+[gd_scene load_steps=8 format=3 uid="uid://dglyrw6c2qip1"]
 
 [ext_resource type="Script" path="res://main.gd" id="1_w2u35"]
-[ext_resource type="PackedScene" uid="uid://crsxx5jqy42iq" path="res://mob.tscn" id="2_n017m"]
-[ext_resource type="PackedScene" uid="uid://chlv4jscyspfi" path="res://player.tscn" id="3_nqwrk"]
+[ext_resource type="PackedScene" uid="uid://crfr4r85ltop8" path="res://mob.tscn" id="2_n017m"]
+[ext_resource type="PackedScene" uid="uid://wj3uutohyohv" path="res://player.tscn" id="3_nqwrk"]
+[ext_resource type="PackedScene" uid="uid://dxtg3jf8l7btx" path="res://hud.tscn" id="4_77q8u"]
+[ext_resource type="AudioStream" uid="uid://bhrfyonprmay7" path="res://assets/art/House In a Forest Loop.ogg" id="5_df0hl"]
+[ext_resource type="AudioStream" uid="uid://bfaqh1wmhpoys" path="res://assets/art/gameover.wav" id="6_hdpcn"]
 
-[sub_resource type="Curve2D" id="Curve2D_k3opc"]
+[sub_resource type="Curve2D" id="Curve2D_y238u"]
 _data = {
 "points": PackedVector2Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 480, 0, 0, 0, 0, 0, 480, 720, 0, 0, 0, 0, 0, 720, 0, 0, 0, 0, 0, 0)
 }
@@ -13,6 +16,14 @@ point_count = 5
 [node name="Main" type="Node"]
 script = ExtResource("1_w2u35")
 mob_scene = ExtResource("2_n017m")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.222299, 0.599841, 0.551501, 1)
 
 [node name="Player" parent="." instance=ExtResource("3_nqwrk")]
 
@@ -29,11 +40,21 @@ one_shot = true
 position = Vector2(240, 450)
 
 [node name="MobPath" type="Path2D" parent="."]
-curve = SubResource("Curve2D_k3opc")
+curve = SubResource("Curve2D_y238u")
 
 [node name="MobSpawnLocation" type="PathFollow2D" parent="MobPath"]
 
+[node name="HUD" parent="." instance=ExtResource("4_77q8u")]
+
+[node name="Music" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("5_df0hl")
+
+[node name="DeathSound" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("6_hdpcn")
+
 [connection signal="hit" from="Player" to="." method="game_over"]
-[connection signal="timeout" from="MobTimer" to="." method="_on_MobTimer_timeout"]
-[connection signal="timeout" from="ScoreTimer" to="." method="_on_ScoreTimer_timeout"]
-[connection signal="timeout" from="StartTimer" to="." method="_on_StartTimer_timeout"]
+[connection signal="hit" from="Player" to="." method="new_game"]
+[connection signal="timeout" from="MobTimer" to="." method="_on_mob_timer_timeout"]
+[connection signal="timeout" from="ScoreTimer" to="." method="_on_score_timer_timeout"]
+[connection signal="timeout" from="StartTimer" to="." method="_on_start_timer_timeout"]
+[connection signal="start_game" from="HUD" to="." method="new_game"]
