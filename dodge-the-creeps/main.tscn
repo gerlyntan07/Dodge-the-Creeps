@@ -26,6 +26,7 @@ grow_vertical = 2
 color = Color(0.222299, 0.599841, 0.551501, 1)
 
 [node name="Player" parent="." instance=ExtResource("3_nqwrk")]
+position = Vector2(240, 450)
 
 [node name="MobTimer" type="Timer" parent="."]
 wait_time = 0.5
@@ -52,8 +53,8 @@ stream = ExtResource("5_df0hl")
 [node name="DeathSound" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("6_hdpcn")
 
-[connection signal="hit" from="Player" to="." method="game_over"]
 [connection signal="hit" from="Player" to="." method="new_game"]
+[connection signal="hit" from="Player" to="." method="game_over"]
 [connection signal="timeout" from="MobTimer" to="." method="_on_mob_timer_timeout"]
 [connection signal="timeout" from="ScoreTimer" to="." method="_on_score_timer_timeout"]
 [connection signal="timeout" from="StartTimer" to="." method="_on_start_timer_timeout"]

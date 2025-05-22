@@ -4,8 +4,9 @@ extends Node
 var score
 
 func _ready():
-	$Player.connect("hit", Callable(self, "game_over"))
-	new_game()
+	$Player.connect("hit", Callable(self, "game_over"))	
+	if not $HUD.is_connected("start_game", Callable(self, "_on_HUD_start_game")):
+		$HUD.connect("start_game", Callable(self, "_on_HUD_start_game"))
 
 func game_over():
 	$ScoreTimer.stop()
@@ -13,6 +14,7 @@ func game_over():
 	$HUD.show_game_over()
 	$Music.stop()
 	$DeathSound.play()
+	$StartTimer.stop()
 	
 func new_game():
 	get_tree().call_group("mobs", "queue_free")
